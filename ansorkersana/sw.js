@@ -1,4 +1,5 @@
-const CACHE_NAME = 'ansor-static-v4';
+const CACHE_NAME = 'ansor-static-v5';
+
 const PRE_CACHE_ASSETS = [
   'https://www.ansorkersana.or.id/assets/css/tailwind.min.css',
   'https://www.ansorkersana.or.id/assets/css/daisyui.full.css',
@@ -21,9 +22,7 @@ self.addEventListener('install', (event) => {
         console.log('[SW] Caching assets');
         return cache.addAll(PRE_CACHE_ASSETS);
       })
-      .catch((err) => {
-        console.error('[SW] Cache failed:', err);
-      })
+      .catch((err) => console.error('[SW] Cache failed:', err))
   );
 
   self.skipWaiting();
@@ -52,38 +51,22 @@ self.addEventListener('activate', (event) => {
 });
 
 // ======================
-// FETCH (Cache Strategy)
+// FETCH (ANTI ERROR VERSION)
 // ======================
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
 
-  const url = new URL(event.request.url);
-
-  const isStatic =
-    PRE_CACHE_ASSETS.includes(event.request.url) ||
-    url.pathname.endsWith('.css') ||
-    url.pathname.endsWith('.js') ||
-    url.pathname.endsWith('.woff2');
-
-  if (isStatic) {
-    event.respondWith(
-      caches.match(event.request).then((cached) => {
-        if (cached) return cached;
-
-self.addEventListener('fetch', (event) => {
-
-  // ✅ Hanya GET request
+  // ✅ hanya GET
   if (event.request.method !== 'GET') return;
 
   const requestURL = new URL(event.request.url);
 
-  // ✅ SKIP request aneh (WAJIB)
+  // ✅ hanya http/https (hindari chrome-extension dll)
   if (
     requestURL.protocol !== 'http:' &&
     requestURL.protocol !== 'https:'
   ) return;
 
-  // ✅ SKIP service worker sendiri (PENTING BANGET)
+  // ✅ jangan handle service worker sendiri
   if (requestURL.pathname.includes('sw.js')) return;
 
   const isStatic =
@@ -102,7 +85,7 @@ self.addEventListener('fetch', (event) => {
       return fetch(event.request)
         .then((response) => {
 
-          // ✅ pastikan response valid
+          // ✅ validasi response
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
@@ -116,19 +99,12 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
-          // ✅ fallback aman (WAJIB return sesuatu)
+          // ✅ fallback wajib return
           return caches.match(event.request);
         });
 
     })
   );
-});
-          .catch(() => {
-            return caches.match(event.request);
-          });
-      })
-    );
-  }
 });
 
 // ======================
@@ -160,7 +136,8 @@ self.addEventListener('push', (event) => {
         url: data.url
       },
       vibrate: [100, 50, 100],
-      tag: 'ansor-notif'
+      tag: 'ansor-notif',
+      renotify: true
     })
   );
 });
@@ -178,11 +155,13 @@ self.addEventListener('notificationclick', (event) => {
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true })
       .then((clientList) => {
+
         for (let client of clientList) {
           if (client.url === targetUrl && 'focus' in client) {
             return client.focus();
           }
         }
+
         return clients.openWindow(targetUrl);
       })
   );
