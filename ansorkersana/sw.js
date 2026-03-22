@@ -70,17 +70,11 @@ self.addEventListener('fetch', (event) => {
       caches.match(event.request).then((cached) => {
         if (cached) return cached;
 
-        return fetch(event.request)
-          .then((response) => {
-            if (!response || response.status !== 200) return response;
+const requestURL = new URL(event.request.url);
 
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, clone);
-            });
-
-            return response;
-          })
+if (requestURL.protocol !== 'http:' && requestURL.protocol !== 'https:') {
+  return response;
+}
           .catch(() => {
             return caches.match(event.request);
           });
