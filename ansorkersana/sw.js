@@ -70,11 +70,59 @@ self.addEventListener('fetch', (event) => {
       caches.match(event.request).then((cached) => {
         if (cached) return cached;
 
-const requestURL = new URL(event.request.url);
+self.addEventListener('fetch', (event) => {
 
-if (requestURL.protocol !== 'http:' && requestURL.protocol !== 'https:') {
-  return response;
-}
+  // ✅ Hanya GET request
+  if (event.request.method !== 'GET') return;
+
+  const requestURL = new URL(event.request.url);
+
+  // ✅ SKIP request aneh (WAJIB)
+  if (
+    requestURL.protocol !== 'http:' &&
+    requestURL.protocol !== 'https:'
+  ) return;
+
+  // ✅ SKIP service worker sendiri (PENTING BANGET)
+  if (requestURL.pathname.includes('sw.js')) return;
+
+  const isStatic =
+    PRE_CACHE_ASSETS.includes(event.request.url) ||
+    requestURL.pathname.endsWith('.css') ||
+    requestURL.pathname.endsWith('.js') ||
+    requestURL.pathname.endsWith('.woff2');
+
+  if (!isStatic) return;
+
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+
+      if (cached) return cached;
+
+      return fetch(event.request)
+        .then((response) => {
+
+          // ✅ pastikan response valid
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+          }
+
+          const clone = response.clone();
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clone);
+          });
+
+          return response;
+        })
+        .catch(() => {
+          // ✅ fallback aman (WAJIB return sesuatu)
+          return caches.match(event.request);
+        });
+
+    })
+  );
+});
           .catch(() => {
             return caches.match(event.request);
           });
