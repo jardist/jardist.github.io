@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ansor-static-v2';
+const CACHE_NAME = 'ansor-static-v3';
 const PRE_CACHE_ASSETS = [
   'https://www.ansorkersana.or.id/assets/css/tailwind.min.css',
   'https://www.ansorkersana.or.id/assets/css/daisyui.full.css',
@@ -9,76 +9,70 @@ const PRE_CACHE_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&display=swap'
 ];
 
-// 1. Install: Simpan aset wajib ke dalam cache
+// Helper untuk cek ketersediaan Cache API
+const isCacheAvailable = () => typeof caches !== 'undefined';
+
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('Caching static assets...');
-      return cache.addAll(PRE_CACHE_ASSETS);
-    })
-  );
+  if (isCacheAvailable()) {
+    event.waitUntil(
+      caches.open(CACHE_NAME).then((cache) => {
+        console.log('Caching assets...');
+        return cache.addAll(PRE_CACHE_ASSETS);
+      }).catch(err => console.error('Cache Open Error:', err))
+    );
+  }
   self.skipWaiting();
 });
 
-// 2. Activate: Bersihkan cache versi lama
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
+  if (isCacheAvailable()) {
+    event.waitUntil(
+      caches.keys().then((keys) => {
+        return Promise.all(keys.map((key) => {
           if (key !== CACHE_NAME) return caches.delete(key);
-        })
-      );
-    })
-  );
-  self.clients.claim();
-});
-
-// 3. Fetch: Ambil dari Cache jika ada, jika tidak ambil dari Network
-self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-
-  // HANYA CEGAT PERMINTAAN UNTUK ASET STATIS (CSS, JS, FONTS)
-  const isStaticAsset = PRE_CACHE_ASSETS.includes(event.request.url) || 
-                        url.pathname.endsWith('.css') || 
-                        url.pathname.endsWith('.js') ||
-                        url.hostname.includes('gstatic.com') ||
-                        url.hostname.includes('googleapis.com');
-
-  if (isStaticAsset) {
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        return response || fetch(event.request).then((networkResponse) => {
-          // Simpan ke cache secara dinamis jika belum ada
-          if (networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
-            });
-          }
-          return networkResponse;
-        });
+        }));
       })
     );
   }
-  // Untuk permintaan lain (Halaman blog/HTML), biarkan lewat secara normal (Default browser)
-  return;
+  self.clients.claim();
 });
 
-// 4. PUSH NOTIFICATIONS (Tetap Aktif)
-self.addEventListener('push', (event) => {
-  let data = { title: 'Ansor Kersana', body: 'Ada informasi terbaru.', url: '/' };
-  if (event.data) {
-    try { data = event.data.json(); } catch (e) { data.body = event.data.text(); }
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  const isStatic = PRE_CACHE_ASSETS.includes(event.request.url) || url.pathname.endsWith('.css') || url.pathname.endsWith('.js');
+
+  if (isStatic && isCacheAvailable()) {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request).then((netRes) => {
+          if (netRes.status === 200) {
+            const clone = netRes.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return netRes;
+        });
+      }).catch(() => fetch(event.request))
+    );
   }
-  const options = {
-    body: data.body,
-    icon: 'https://www.ansorkersana.or.id/favicon.ico',
-    badge: 'https://www.ansorkersana.or.id/favicon.ico',
-    vibrate: [100, 50, 100],
-    data: { url: data.url || '/' }
-  };
-  event.waitUntil(self.registration.showNotification(data.title, options));
+});
+
+// PUSH NOTIFICATION (Tetap di luar cek cache karena tidak butuh Cache API)
+self.addEventListener('push', (event) => {
+  let data = { title: 'Ansor Kersana', body: 'Update terbaru tersedia.', url: '/' };
+  try {
+    if (event.data) data = event.data.json();
+  } catch (e) {
+    data.body = event.data.text();
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: '/favicon.ico',
+      badge: '/favicon.ico',
+      data: { url: data.url }
+    })
+  );
 });
 
 self.addEventListener('notificationclick', (event) => {
