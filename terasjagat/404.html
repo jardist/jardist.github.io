@@ -11,19 +11,23 @@
 #tj2{transition: .5s;fill: var(--tjCol2);}
 #tj3{transition: .5s;fill: var(--tjCol3);}
 .none{display:none}
+.min-h-\[calc\(100vh-128px\)\]{min-height: calc(100vh - 128px);}
 .z-\[100\]{z-index: 100;}
-.-shadow-md{--tw-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);}
 .p-\[20px\]{padding: 20px;}
-.ad-vertical{display: flex;width: 100%;height: auto;}
+.w-full {width: 100%;}
+.h-auto{height:auto}
+.-shadow-md{--tw-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);}
 @media (min-width: 768px) {
 .md\:flex{display:flex}  
 .md\:p-\[20px\]{padding: 20px;}
 .md\:w-\[70px\]{width: 70px;}
 .md\:min-h-\[calc\(100vh-40px\)\]{min-height: calc(100vh - 40px);}
-.ad-vertical{width: 160px;height: 600px;}
+.md\:min-h-\[calc\(100vh-64px\)\]{min-height: calc(100vh - 64px);}
+.md\:w-\[160px\]{width:160px;}
+.md\:h-\[600px\]{height:600px;}
 }
 @media (min-width: 1024px) {
-.ad-vertical{width: 300px;}
+.lg\:w-\[300px\]{width:300px;}
 }
 </style> 
 </head>
@@ -79,7 +83,7 @@
 </div>
 </nav>
 
-<main role="main" class="p-5 flex flex-col items-center justify-center min-h-screen">
+<main role="main" class="p-5 flex flex-col items-center justify-center min-h-[calc(100vh-128px)] md:min-h-[calc(100vh-64px)]">
 <h1 class='text-center'>404: Page Not Found</h1>
 <h2 class='text-center'>Halaman Yang Anda Cari Tidak Ada!</h2>
 </main>
@@ -87,7 +91,7 @@
 </div>
 
 <aside class="none md:flex items-center p-[20px] sticky bg-base-100 top-0 border-l border-base-200 min-h-screen">
-<ins class="ad-vertical bg-base-200 rounded-xl items-center justify-center no-underline">
+<ins class="flex w-full h-auto bg-base-200 rounded-xl items-center justify-center no-underline md:w-[160px] md:h-[600px] lg:w-[300px]">
 <p class="flex flex-col items-center"><b>Pasang Iklan Disini</b><i>Hubungi Admin</i></p></ins>
 </aside>
   
