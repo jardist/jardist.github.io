@@ -1,0 +1,41 @@
+{
+  "name": "Ansor Jagapura Progressive Web App",
+  "short_name": "Ansor Jagapura",
+  "description": "Situs Resmi PR GP Ansor Jagapura, Kecamatan Kersana, Kabupaten Brebes.",
+  "start_url": "https://jagapura.ansorkersana.or.id/",
+  "display": "standalone",
+  "background_color": "#00803e",
+  "theme_color": "#00803e",
+  "icons": [
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgPlzS19sv7oix4L2tJCStIqdHWnD7Jp6RrO1RQqrY6sAzqNDdJbfgaxmr0ODsbii3CF6xsoLze9TYifU3w4tanZFxBysb1aU4kbVOSCfuwHI3YswDP-c8OL_Qmmht-ib5X1r5_VHqvzuPhGXN-hLbHyRr_OD8cb8y1qs6VfX7t2bbUa6koNgSh7WWk7ts/s192/faviconM.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgPlzS19sv7oix4L2tJCStIqdHWnD7Jp6RrO1RQqrY6sAzqNDdJbfgaxmr0ODsbii3CF6xsoLze9TYifU3w4tanZFxBysb1aU4kbVOSCfuwHI3YswDP-c8OL_Qmmht-ib5X1r5_VHqvzuPhGXN-hLbHyRr_OD8cb8y1qs6VfX7t2bbUa6koNgSh7WWk7ts/s512/faviconM.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEixr1OJHEJU8jFTApHL_Ll-yv3oRKGMZk5dff27U9w_PoXq_boHIFpei3OtgIt5-naWzYh6SV0hxz_fACXe6Lhm_l4ShYFbGOAxVxHLMxSwzdjesbma9FkOzSjH1XIbd6JLXKF8GfvHG1iTuuvtZTOLMo6pPT4-xg_bCr2B_5q0Y6bpPVzOtt5wM0m3KWM/s32/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEixr1OJHEJU8jFTApHL_Ll-yv3oRKGMZk5dff27U9w_PoXq_boHIFpei3OtgIt5-naWzYh6SV0hxz_fACXe6Lhm_l4ShYFbGOAxVxHLMxSwzdjesbma9FkOzSjH1XIbd6JLXKF8GfvHG1iTuuvtZTOLMo6pPT4-xg_bCr2B_5q0Y6bpPVzOtt5wM0m3KWM/s144/favicon.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjNtLGSV9tAUqbX6UeKiLD0PpGZ5aJPow1nHAZAugDB4TJZc01Etb-46iEbG-3eVAHPU5PlnSIZiFDziuy_O_Oj9Mbwb7Nut8GC-DDOQe-DPc1Wk85Rs9l7erPkXOIJDTNxow99XnHg3kUlElV-Iy-AQg-ARKTbdBwHBisC1ResUjtOeyJG98uAUeOqcXA/s512/faviconMc.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "monochrome"
+    }
+  ]
+}
