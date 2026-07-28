@@ -1,0 +1,41 @@
+{
+  "name": "AQFO - Digital App Service",
+  "short_name": "AQFO",
+  "description": "Tidak perlu banyak aplikasi. Kelola kas, data komunitas, absensi, dan kebutuhan administrasi lainnya dalam satu platform yang cepat, aman, dan tanpa biaya server",
+  "start_url": "https://aqfo.blogspot.com/",
+  "display": "standalone",
+  "background_color": "#047857",
+  "theme_color": "#047857",
+  "icons": [
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnBYCYczrkpcZh6Y19S2nrFVowXgortP5T5dm0KdFQZzSG53KEx25xCgVl4Fybt72r87ZWCUNQ5FzYchTnRau648R6Nt6EjJqpwAW0194rnZGKZePGdjI4pmTtN3bC2OwMDGKxDcFx6PSa2vYxwS2_eOVI7IlqPWDdmb5n0aADXjTUDaj8NviJti-wSYU/s192/aqfo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnBYCYczrkpcZh6Y19S2nrFVowXgortP5T5dm0KdFQZzSG53KEx25xCgVl4Fybt72r87ZWCUNQ5FzYchTnRau648R6Nt6EjJqpwAW0194rnZGKZePGdjI4pmTtN3bC2OwMDGKxDcFx6PSa2vYxwS2_eOVI7IlqPWDdmb5n0aADXjTUDaj8NviJti-wSYU/s512/aqfo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnBYCYczrkpcZh6Y19S2nrFVowXgortP5T5dm0KdFQZzSG53KEx25xCgVl4Fybt72r87ZWCUNQ5FzYchTnRau648R6Nt6EjJqpwAW0194rnZGKZePGdjI4pmTtN3bC2OwMDGKxDcFx6PSa2vYxwS2_eOVI7IlqPWDdmb5n0aADXjTUDaj8NviJti-wSYU/s32/aqfo.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnBYCYczrkpcZh6Y19S2nrFVowXgortP5T5dm0KdFQZzSG53KEx25xCgVl4Fybt72r87ZWCUNQ5FzYchTnRau648R6Nt6EjJqpwAW0194rnZGKZePGdjI4pmTtN3bC2OwMDGKxDcFx6PSa2vYxwS2_eOVI7IlqPWDdmb5n0aADXjTUDaj8NviJti-wSYU/s144/aqfo.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnBYCYczrkpcZh6Y19S2nrFVowXgortP5T5dm0KdFQZzSG53KEx25xCgVl4Fybt72r87ZWCUNQ5FzYchTnRau648R6Nt6EjJqpwAW0194rnZGKZePGdjI4pmTtN3bC2OwMDGKxDcFx6PSa2vYxwS2_eOVI7IlqPWDdmb5n0aADXjTUDaj8NviJti-wSYU/s512/aqfo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "monochrome"
+    }
+  ]
+}
