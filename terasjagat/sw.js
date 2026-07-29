@@ -1,8 +1,9 @@
 // ✅ 1. Naikkan versi cache agar browser memperbarui sistem
-const CACHE_NAME = 'tj-v2';
+const CACHE_NAME = 'tj-v3'; // Naikkan versi menjadi v3
 
 // ✅ 2. Tambahkan URL Utama dan Manifest ke dalam pre-cache
 const PRE_CACHE_ASSETS = [
+  '/', // Tambahkan root relatif sebagai cadangan
   'https://www.terasjagat.id/',
   'https://www.terasjagat.id/manifest.json',
   'https://www.terasjagat.id/assets/css/tailwind2219min.css',
@@ -71,10 +72,28 @@ self.addEventListener('fetch', (event) => {
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
+        .then((networkResponse) => {
+          // PERBAIKAN: Jika online, simpan halaman yang dibuka ke cache 
+          // (Berguna agar artikel yang pernah dibaca bisa dibuka saat offline)
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clone);
+          });
+          return networkResponse;
+        })
         .catch(() => {
-          // Jika offline (fetch gagal), kembalikan halaman utama yang sudah di-cache
-          console.log('[SW] Offline mode: Serving cached homepage');
-          return caches.match('https://www.terasjagat.id/');
+          // Jika offline (fetch gagal)
+          console.log('[SW] Offline mode: Mencari halaman di cache');
+          
+          // 1. Coba berikan halaman artikel yang diminta dari cache (jika pernah dibaca)
+          return caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            // 2. Jika halaman belum pernah dibaca, fallback ke halaman utama
+            // PERBAIKAN: ignoreSearch: true SANGAT PENTING untuk Blogger karena HP menambahkan ?m=1
+            return caches.match('https://www.terasjagat.id/', { ignoreSearch: true });
+          });
         })
     );
     return; // Stop eksekusi di sini untuk navigasi
@@ -88,14 +107,17 @@ self.addEventListener('fetch', (event) => {
     requestURL.pathname.endsWith('.css') ||
     requestURL.pathname.endsWith('.js') ||
     requestURL.pathname.endsWith('.woff2') ||
-    requestURL.pathname.endsWith('.png') ||   // Support gambar png (icon)
-    requestURL.pathname.endsWith('.svg') ||   // Support gambar svg
-    requestURL.pathname.endsWith('.json');    // Support manifest.json
+    requestURL.pathname.endsWith('.png') ||
+    requestURL.pathname.endsWith('.svg') ||
+    requestURL.pathname.endsWith('.json') ||
+    requestURL.pathname.endsWith('.jpg') || // Tambahan untuk gambar jpg
+    requestURL.pathname.endsWith('.webp');  // Tambahan untuk gambar webp (format modern)
 
   if (!isStatic) return;
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
+    // PERBAIKAN: Tambahkan ignoreSearch pada file statis, jaga-jaga ada query string seperti ?v=1.0
+    caches.match(event.request, { ignoreSearch: true }).then((cached) => {
 
       if (cached) return cached; // Jika ada di cache, langsung berikan
 
@@ -103,8 +125,10 @@ self.addEventListener('fetch', (event) => {
       return fetch(event.request)
         .then((response) => {
 
-          // Validasi response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+          // PERBAIKAN: Hapus validasi response.type !== 'basic' 
+          // Agar file statis dari CDN eksternal (seperti Google Fonts/Blogger image host) bisa tersimpan.
+          // Hanya tolak jika status bukan 200 (OK) dan bukan 0 (Opaque response untuk resource cross-origin).
+          if (!response || (response.status !== 200 && response.status !== 0)) {
             return response;
           }
 
@@ -118,7 +142,7 @@ self.addEventListener('fetch', (event) => {
         })
         .catch(() => {
           // Fallback statis jika offline
-          return caches.match(event.request);
+          return caches.match(event.request, { ignoreSearch: true });
         });
 
     })
