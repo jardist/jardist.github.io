@@ -1,5 +1,5 @@
 // ✅ 1. Naikkan versi cache agar browser memperbarui sistem
-const CACHE_NAME = 'tj-v5'; // Naikkan versi menjadi v5 untuk menimpa yang gagal
+const CACHE_NAME = 'tj-v6'; // Naikkan versi menjadi v6 untuk perbaikan fatal error
 
 // ✅ 2. Tambahkan URL Utama dan Manifest ke dalam pre-cache
 // PERBAIKAN: Hapus URL beranda utama dari sini karena menyebabkan error Redirect 302 di Blogger HP
@@ -72,12 +72,28 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(event.request)
         .then((networkResponse) => {
-          // PERBAIKAN: Jika online, simpan halaman yang dibuka ke cache 
-          // (Berguna agar artikel yang pernah dibaca bisa dibuka saat offline)
-          const clone = networkResponse.clone();
+          // PERBAIKAN KRUSIAL: Menangani Redirect otomatis Blogger (?m=1)
+          // Browser menolak (crash) jika disuruh mencache response yang memiliki status 'redirected'.
+          // Kita harus membuat salinan "bersih" dari response tersebut sebelum menyimpannya ke cache.
+          
+          let responseToCache;
+          if (networkResponse.redirected) {
+            const cloned = networkResponse.clone();
+            // Buat response baru agar flag/status 'redirected' terhapus
+            responseToCache = new Response(cloned.body, {
+              headers: cloned.headers,
+              status: cloned.status,
+              statusText: cloned.statusText
+            });
+          } else {
+            responseToCache = networkResponse.clone();
+          }
+
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, clone);
+            // Abaikan error diam-diam jika cache masih menolak
+            cache.put(event.request, responseToCache).catch((err) => console.warn('[SW] Cache put error:', err));
           });
+          
           return networkResponse;
         })
         .catch(() => {
