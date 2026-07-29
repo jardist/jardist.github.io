@@ -1,18 +1,12 @@
-// ✅ 1. Naikkan versi cache agar browser memperbarui sistem
-const CACHE_NAME = 'tj-v3'; // Naikkan versi menjadi v3
+const CACHE_NAME = 'tj-v4'; 
 
-// ✅ 2. Tambahkan URL Utama dan Manifest ke dalam pre-cache
 const PRE_CACHE_ASSETS = [
-  '/', // Tambahkan root relatif sebagai cadangan
   'https://www.terasjagat.id/',
   'https://www.terasjagat.id/manifest.json',
   'https://www.terasjagat.id/assets/css/tailwind2219min.css',
   'https://www.terasjagat.id/assets/css/daisyui4419min.css'
 ];
 
-// ======================
-// INSTALL
-// ======================
 self.addEventListener('install', (event) => {
   console.log('[SW] Installing...');
 
@@ -28,9 +22,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// ======================
-// ACTIVATE
-// ======================
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activated');
 
@@ -50,31 +41,21 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// ======================
-// FETCH (OFFLINE SUPPORT FIXED)
-// ======================
 self.addEventListener('fetch', (event) => {
 
-  // Hanya proses metode GET
   if (event.request.method !== 'GET') return;
 
   const requestURL = new URL(event.request.url);
 
-  // Hanya http/https
   if (requestURL.protocol !== 'http:' && requestURL.protocol !== 'https:') return;
 
-  // Jangan handle service worker sendiri
   if (requestURL.pathname.includes('sw.js')) return;
 
-
-  // ✅ STRATEGI A: Tangani Request HTML / Navigasi Halaman
-  // Menggunakan strategi "Network First, Fallback to Cache"
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
         .then((networkResponse) => {
-          // PERBAIKAN: Jika online, simpan halaman yang dibuka ke cache 
-          // (Berguna agar artikel yang pernah dibaca bisa dibuka saat offline)
+
           const clone = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, clone);
@@ -82,26 +63,20 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // Jika offline (fetch gagal)
+
           console.log('[SW] Offline mode: Mencari halaman di cache');
           
-          // 1. Coba berikan halaman artikel yang diminta dari cache (jika pernah dibaca)
           return caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
             if (cachedResponse) {
               return cachedResponse;
             }
-            // 2. Jika halaman belum pernah dibaca, fallback ke halaman utama
-            // PERBAIKAN: ignoreSearch: true SANGAT PENTING untuk Blogger karena HP menambahkan ?m=1
             return caches.match('https://www.terasjagat.id/', { ignoreSearch: true });
           });
         })
     );
-    return; // Stop eksekusi di sini untuk navigasi
+    return;
   }
 
-
-  // ✅ STRATEGI B: Tangani Request File Statis
-  // Menggunakan strategi "Cache First, Fallback to Network"
   const isStatic =
     PRE_CACHE_ASSETS.includes(event.request.url) ||
     requestURL.pathname.endsWith('.css') ||
@@ -110,24 +85,20 @@ self.addEventListener('fetch', (event) => {
     requestURL.pathname.endsWith('.png') ||
     requestURL.pathname.endsWith('.svg') ||
     requestURL.pathname.endsWith('.json') ||
-    requestURL.pathname.endsWith('.jpg') || // Tambahan untuk gambar jpg
-    requestURL.pathname.endsWith('.webp');  // Tambahan untuk gambar webp (format modern)
+    requestURL.pathname.endsWith('.jpg') ||
+    requestURL.pathname.endsWith('.webp'); 
 
   if (!isStatic) return;
 
   event.respondWith(
-    // PERBAIKAN: Tambahkan ignoreSearch pada file statis, jaga-jaga ada query string seperti ?v=1.0
+
     caches.match(event.request, { ignoreSearch: true }).then((cached) => {
 
-      if (cached) return cached; // Jika ada di cache, langsung berikan
+      if (cached) return cached; 
 
-      // Jika tidak ada di cache, ambil dari internet
       return fetch(event.request)
         .then((response) => {
 
-          // PERBAIKAN: Hapus validasi response.type !== 'basic' 
-          // Agar file statis dari CDN eksternal (seperti Google Fonts/Blogger image host) bisa tersimpan.
-          // Hanya tolak jika status bukan 200 (OK) dan bukan 0 (Opaque response untuk resource cross-origin).
           if (!response || (response.status !== 200 && response.status !== 0)) {
             return response;
           }
@@ -149,9 +120,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// ======================
-// PUSH NOTIFICATION
-// ======================
 self.addEventListener('push', (event) => {
   console.log('[SW] Push received');
 
@@ -184,9 +152,6 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// ======================
-// CLICK NOTIFICATION
-// ======================
 self.addEventListener('notificationclick', (event) => {
   console.log('[SW] Notification clicked');
 
