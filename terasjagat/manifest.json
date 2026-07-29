@@ -37,5 +37,21 @@
       "type": "image/png",
       "purpose": "monochrome"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "https://www.terasjagat.id/assets/img/ss/dekstop1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Tampilan Desktop Aplikasi"
+    },
+    {
+      "src": "https://www.terasjagat.id/assets/img/ss/mobile1.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tampilan Mobile Aplikasi"
+    }
   ]
 }
