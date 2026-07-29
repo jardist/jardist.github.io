@@ -1,6 +1,10 @@
-const CACHE_NAME = 'tj-v1';
+// ✅ 1. Naikkan versi cache agar browser memperbarui sistem
+const CACHE_NAME = 'tj-v2';
 
+// ✅ 2. Tambahkan URL Utama dan Manifest ke dalam pre-cache
 const PRE_CACHE_ASSETS = [
+  'https://www.terasjagat.id/',
+  'https://www.terasjagat.id/manifest.json',
   'https://www.terasjagat.id/assets/css/tailwind.min.css',
   'https://www.terasjagat.id/assets/css/daisyui.full.css'
 ];
@@ -14,7 +18,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Caching assets');
+        console.log('[SW] Caching core assets');
         return cache.addAll(PRE_CACHE_ASSETS);
       })
       .catch((err) => console.error('[SW] Cache failed:', err))
@@ -46,41 +50,60 @@ self.addEventListener('activate', (event) => {
 });
 
 // ======================
-// FETCH (ANTI ERROR VERSION)
+// FETCH (OFFLINE SUPPORT FIXED)
 // ======================
 self.addEventListener('fetch', (event) => {
 
-  // ✅ hanya GET
+  // Hanya proses metode GET
   if (event.request.method !== 'GET') return;
 
   const requestURL = new URL(event.request.url);
 
-  // ✅ hanya http/https (hindari chrome-extension dll)
-  if (
-    requestURL.protocol !== 'http:' &&
-    requestURL.protocol !== 'https:'
-  ) return;
+  // Hanya http/https
+  if (requestURL.protocol !== 'http:' && requestURL.protocol !== 'https:') return;
 
-  // ✅ jangan handle service worker sendiri
+  // Jangan handle service worker sendiri
   if (requestURL.pathname.includes('sw.js')) return;
 
+
+  // ✅ STRATEGI A: Tangani Request HTML / Navigasi Halaman
+  // Menggunakan strategi "Network First, Fallback to Cache"
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          // Jika offline (fetch gagal), kembalikan halaman utama yang sudah di-cache
+          console.log('[SW] Offline mode: Serving cached homepage');
+          return caches.match('https://www.terasjagat.id/');
+        })
+    );
+    return; // Stop eksekusi di sini untuk navigasi
+  }
+
+
+  // ✅ STRATEGI B: Tangani Request File Statis
+  // Menggunakan strategi "Cache First, Fallback to Network"
   const isStatic =
     PRE_CACHE_ASSETS.includes(event.request.url) ||
     requestURL.pathname.endsWith('.css') ||
     requestURL.pathname.endsWith('.js') ||
-    requestURL.pathname.endsWith('.woff2');
+    requestURL.pathname.endsWith('.woff2') ||
+    requestURL.pathname.endsWith('.png') ||   // Support gambar png (icon)
+    requestURL.pathname.endsWith('.svg') ||   // Support gambar svg
+    requestURL.pathname.endsWith('.json');    // Support manifest.json
 
   if (!isStatic) return;
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
 
-      if (cached) return cached;
+      if (cached) return cached; // Jika ada di cache, langsung berikan
 
+      // Jika tidak ada di cache, ambil dari internet
       return fetch(event.request)
         .then((response) => {
 
-          // ✅ validasi response
+          // Validasi response
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
@@ -94,7 +117,7 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
-          // ✅ fallback wajib return
+          // Fallback statis jika offline
           return caches.match(event.request);
         });
 
