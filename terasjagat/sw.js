@@ -5,8 +5,8 @@ const CACHE_NAME = 'tj-v2';
 const PRE_CACHE_ASSETS = [
   'https://www.terasjagat.id/',
   'https://www.terasjagat.id/manifest.json',
-  'https://www.terasjagat.id/assets/css/tailwind.min.css',
-  'https://www.terasjagat.id/assets/css/daisyui.full.css'
+  'https://www.terasjagat.id/assets/css/tailwind2219min.css',
+  'https://www.terasjagat.id/assets/css/daisyui4419min.css'
 ];
 
 // ======================
