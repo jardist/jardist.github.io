@@ -8,31 +8,31 @@
   "theme_color": "#5da932",
   "icons": [
     {
-      "src": "https://www.terasjagat.id/assets/img/icon/192.png",
+      "src": "https://www.terasjagat.id/assets/img/icon/192m.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "https://www.terasjagat.id/assets/img/icon/512.png",
+      "src": "https://www.terasjagat.id/assets/img/icon/512m.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "https://www.terasjagat.id/assets/img/icon/32.png",
+      "src": "https://www.terasjagat.id/assets/img/icon/32a.png",
       "sizes": "32x32",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://www.terasjagat.id/assets/img/icon/144.png",
+      "src": "https://www.terasjagat.id/assets/img/icon/144a.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://www.terasjagat.id/assets/img/icon/512.png",
+      "src": "https://www.terasjagat.id/assets/img/icon/512mc.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "monochrome"
