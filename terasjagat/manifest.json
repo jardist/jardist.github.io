@@ -1,9 +1,9 @@
 {
-  "id": "/",
+  "id": "/?m=1",
   "name": "TerasJagat.ID",
   "short_name": "TerasJagat",
-  "description": "Tempat Belajar Online Gratis Yang Nyaman.",
-  "start_url": "https://www.terasjagat.id/",
+  "description": "Satu Platform untuk Semua Kebutuhan Digital.",
+  "start_url": "https://www.terasjagat.id/?m=1",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
