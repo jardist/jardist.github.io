@@ -5,8 +5,8 @@ const CACHE_NAME = 'tj-v6'; // Naikkan versi menjadi v6 untuk perbaikan fatal er
 // PERBAIKAN: Hapus URL beranda utama dari sini karena menyebabkan error Redirect 302 di Blogger HP
 const PRE_CACHE_ASSETS = [
   'https://www.terasjagat.id/manifest.json',
-  'https://www.terasjagat.id/assets/css/tailwind2219min.css',
-  'https://www.terasjagat.id/assets/css/daisyui4419min.css'
+  'https://www.terasjagat.id/assets/js/tailwind430.js',
+  'https://www.terasjagat.id/assets/css/awesome730.css'
 ];
 
 // ======================
