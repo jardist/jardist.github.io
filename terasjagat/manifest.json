@@ -6,7 +6,7 @@
   "start_url": "https://www.terasjagat.id/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#5da932",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "https://www.terasjagat.id/assets/img/icon/192m.png",
