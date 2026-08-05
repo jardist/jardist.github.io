@@ -1,7 +1,7 @@
-// ✅ 1. Naikkan versi cache
-const CACHE_NAME = 'tj-v7'; // versi baru untuk perbaikan
+// ✅ Versi cache — naikkan setiap ada perubahan besar
+const CACHE_NAME = 'tj-v8'; // v8: perbaikan redirect loop
 
-// ✅ 2. Aset statis yang di-pre-cache
+// ✅ Aset statis yang di-pre-cache
 const PRE_CACHE_ASSETS = [
   'https://www.terasjagat.id/manifest.json',
   'https://www.terasjagat.id/assets/js/tailwind430.js',
@@ -45,7 +45,7 @@ self.addEventListener('activate', (event) => {
 });
 
 // ======================
-// FETCH (OFFLINE SUPPORT)
+// FETCH (OFFLINE SUPPORT + ANTI REDIRECT LOOP)
 // ======================
 self.addEventListener('fetch', (event) => {
   // Hanya proses GET
@@ -64,7 +64,13 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(event.request)
         .then((networkResponse) => {
-          // Tangani redirected response (contoh: Blogger ?m=1)
+          // JANGAN simpan respons redirect (status 3xx) ke cache
+          if (networkResponse.status >= 300 && networkResponse.status < 400) {
+            console.warn('[SW] Tidak menyimpan redirect:', networkResponse.url);
+            return networkResponse; // biarkan browser mengikuti redirect saat online
+          }
+
+          // Tangani respons yang merupakan hasil redirect (status 200 tapi flag redirected true)
           let responseToCache;
           if (networkResponse.redirected) {
             const cloned = networkResponse.clone();
@@ -87,15 +93,20 @@ self.addEventListener('fetch', (event) => {
         })
         .catch(() => {
           // OFFLINE: coba ambil dari cache
-          console.log('[SW] Offline, mencari di cache...');
+          console.log('[SW] Offline, mencari di cache untuk:', event.request.url);
           return caches.match(event.request, { ignoreSearch: true })
             .then((cachedResponse) => {
               if (cachedResponse) {
-                console.log('[SW] Ditemukan di cache');
+                // CEGAH REDIRECT LOOP: jika respons di cache adalah redirect, jangan gunakan
+                if (cachedResponse.redirected || (cachedResponse.status >= 300 && cachedResponse.status < 400)) {
+                  console.warn('[SW] Cached response adalah redirect, fallback ke halaman offline');
+                  return getOfflinePage();
+                }
+                console.log('[SW] Ditemukan di cache:', event.request.url);
                 return cachedResponse;
               }
-              // Jika tidak ada cache, tampilkan halaman offline buatan
-              console.log('[SW] Tidak ada cache, tampilkan fallback');
+              // Tidak ada cache → tampilkan halaman offline buatan
+              console.log('[SW] Tidak ada cache, tampilkan halaman offline');
               return getOfflinePage();
             })
             .catch((err) => {
@@ -108,7 +119,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // ✅ STRATEGI B: File statis (Cache First)
+  // ✅ STRATEGI B: File statis (Cache First, Network Fallback)
   const isStatic =
     PRE_CACHE_ASSETS.includes(event.request.url) ||
     requestURL.pathname.endsWith('.css') ||
@@ -118,7 +129,8 @@ self.addEventListener('fetch', (event) => {
     requestURL.pathname.endsWith('.svg') ||
     requestURL.pathname.endsWith('.json') ||
     requestURL.pathname.endsWith('.jpg') ||
-    requestURL.pathname.endsWith('.webp');
+    requestURL.pathname.endsWith('.webp') ||
+    requestURL.pathname.endsWith('.ico'); // tambahan untuk favicon
 
   if (!isStatic) return;
 
@@ -129,9 +141,11 @@ self.addEventListener('fetch', (event) => {
 
         return fetch(event.request)
           .then((response) => {
+            // Hanya simpan respons yang valid (status 200 atau 0 untuk opaque)
             if (!response || (response.status !== 200 && response.status !== 0)) {
               return response;
             }
+
             const clone = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(event.request, clone);
@@ -139,7 +153,7 @@ self.addEventListener('fetch', (event) => {
             return response;
           })
           .catch(() => {
-            // Jika fetch gagal (offline) dan tidak ada di cache, kembalikan respons kosong
+            // Jika fetch gagal (offline) dan tidak ada di cache
             return caches.match(event.request, { ignoreSearch: true });
           });
       })
@@ -151,7 +165,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 // ======================
-// HALAMAN OFFLINE BUATAN
+// HALAMAN OFFLINE BUATAN (FALLBACK)
 // ======================
 function getOfflinePage() {
   const offlineHtml = `
