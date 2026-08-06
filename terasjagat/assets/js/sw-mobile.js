@@ -1,13 +1,14 @@
-// sw-mobile.js - Service worker untuk perangkat mobile (fokus ?m=1)
+// sw-mobile.js II
 
 self.addEventListener('install', performInstall);
 
-self.addEventListener('activate', (event) => {
-  // Panggil aktivasi umum, lalu pre-cache halaman utama mobile
-  performActivate(event);
+self.addEventListener('activate', event => {
   event.waitUntil(
     (async () => {
-      // Pre-cache /?m=1
+      // Bersihkan cache lama
+      await clearOldCaches();
+
+      // Pre-cache halaman utama mobile
       try {
         const response = await fetch('https://www.terasjagat.id/?m=1', { cache: 'no-store' });
         if (response.ok && !response.redirected) {
@@ -18,18 +19,20 @@ self.addEventListener('activate', (event) => {
       } catch (err) {
         console.warn('[SW] Pre-cache /?m=1 gagal:', err);
       }
+
+      // Klaim klien
+      await self.clients.claim();
     })()
   );
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
   if (url.pathname.includes('sw.js')) return;
 
-  // Navigasi: hanya cache jika final URL mengandung ?m=1
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request).then(networkResponse => {
@@ -57,7 +60,6 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       }).catch(() => {
-        // Offline
         if (url.pathname === '/' && !url.search) {
           return caches.match('https://www.terasjagat.id/?m=1', { ignoreSearch: true })
             .then(cached => cached || getOfflinePage())
@@ -71,7 +73,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static & gambar
   if (isStaticOrImage(request)) {
     event.respondWith(cacheStaticOrImage(request));
   }
