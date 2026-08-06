@@ -3,7 +3,6 @@
 const CACHE_NAME = 'tj-v14-' + PLATFORM;
 
 const PRE_CACHE_ASSETS = [
-  'https://www.terasjagat.id/manifest.json',
   'https://www.terasjagat.id/assets/js/tailwind430.js',
   'https://www.terasjagat.id/assets/css/awesome730.css'
 ];
