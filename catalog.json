@@ -1,0 +1,147 @@
+{
+"$schema": "https://jardist.github.io/schema/catalog.v1.json",
+"version": "1.0.0",
+"updated_at": "2026-08-14T00:00:00Z",
+"resources": [
+{
+"name": "AQFO Framework",
+"slug": "aqfo",
+"description": "High-performance modular CSS & UI asset system native to Jardist ecosystem.",
+"category": "CSS",
+"latest_version": "1.4.2",
+"versions": ["1.4.2", "1.4.0", "1.0.0"],
+"distribution": {
+"type": "legacy",
+"base_url": "https://jardist.github.io/aqfo/"
+},
+"files": [
+{
+"path": "css/aqfo.min.css",
+"type": "css",
+"usage": "stylesheet"
+},
+{
+"path": "css/aqfo-grid.min.css",
+"type": "css",
+"usage": "stylesheet"
+},
+{
+"path": "js/aqfo-core.js",
+"type": "javascript",
+"usage": "script"
+}
+],
+"source": "https://github.com/jardist/jardist.github.io/tree/cdn/aqfo",
+"license": "MIT",
+"tags": ["css", "framework", "ui", "aqfo"]
+},
+{
+"name": "Jardist UI Icons",
+"slug": "jardist-icons",
+"description": "Kumpulan ikon SVG dan font ikon ringan yang dioptimalkan untuk komponen web modern.",
+"category": "Assets",
+"latest_version": "2.0.1",
+"versions": ["2.0.1", "2.0.0", "1.5.0"],
+"distribution": {
+"type": "versioned",
+"base_url": "https://jardist.github.io/cdn/"
+},
+"files": [
+{
+"path": "css/jardist-icons.min.css",
+"type": "css",
+"usage": "stylesheet"
+},
+{
+"path": "fonts/jardist-icons.woff2",
+"type": "font",
+"usage": "asset"
+}
+],
+"source": "https://github.com/jardist/jardist.github.io/tree/cdn/jardist-icons",
+"license": "MIT",
+"tags": ["icons", "svg", "fonts", "ui"]
+},
+{
+"name": "Ansor Kersana Portal",
+"slug": "ansorkersana",
+"description": "Public media assets, digital branding materials, and portal resources.",
+"category": "Assets",
+"latest_version": "2.1.0",
+"versions": ["2.1.0", "2.0.0"],
+"distribution": {
+"type": "legacy",
+"base_url": "https://jardist.github.io/ansorkersana/"
+},
+"files": [
+{
+"path": "css/style.min.css",
+"type": "css",
+"usage": "stylesheet"
+},
+{
+"path": "js/app.js",
+"type": "javascript",
+"usage": "script"
+}
+],
+"source": "https://github.com/jardist/jardist.github.io/tree/cdn/ansorkersana",
+"license": "MIT",
+"tags": ["ansorkersana", "portal", "assets"]
+},
+{
+"name": "Jagapura Web Suite",
+"slug": "ansorkersana-jagapura",
+"description": "Regional digital asset package, mapping tools, and templates for Jagapura.",
+"category": "Assets",
+"latest_version": "1.2.0",
+"versions": ["1.2.0", "1.0.0"],
+"distribution": {
+"type": "legacy",
+"base_url": "https://jardist.github.io/ansorkersana/jagapura/"
+},
+"files": [
+{
+"path": "css/jagapura.css",
+"type": "css",
+"usage": "stylesheet"
+},
+{
+"path": "js/jagapura-map.js",
+"type": "javascript",
+"usage": "script"
+}
+],
+"source": "https://github.com/jardist/jardist.github.io/tree/cdn/ansorkersana/jagapura",
+"license": "MIT",
+"tags": ["jagapura", "assets", "maps"]
+},
+{
+"name": "TerasJagat Library",
+"slug": "terasjagat",
+"description": "Lightweight web reader components and digital publishing utility styles.",
+"category": "Libraries",
+"latest_version": "1.0.5",
+"versions": ["1.0.5", "1.0.0"],
+"distribution": {
+"type": "legacy",
+"base_url": "https://jardist.github.io/terasjagat/"
+},
+"files": [
+{
+"path": "css/terasjagat.min.css",
+"type": "css",
+"usage": "stylesheet"
+},
+{
+"path": "js/reader.min.js",
+"type": "javascript",
+"usage": "script"
+}
+],
+"source": "https://github.com/jardist/jardist.github.io/tree/cdn/terasjagat",
+"license": "MIT",
+"tags": ["terasjagat", "library", "reader"]
+}
+]
+}
