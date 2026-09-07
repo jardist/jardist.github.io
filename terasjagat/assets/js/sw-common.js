@@ -4,7 +4,18 @@ const CACHE_NAME = 'tj-v14-' + PLATFORM;
 
 const PRE_CACHE_ASSETS = [
   'https://www.terasjagat.id/assets/js/tailwind430.js',
-  'https://www.terasjagat.id/assets/css/awesome730.css'
+  'https://www.terasjagat.id/assets/js/nav.js',
+  'https://www.terasjagat.id/assets/js/pjax.js',
+  'https://www.terasjagat.id/assets/js/back.js',
+  'https://www.terasjagat.id/assets/js/navActive.js',
+  'https://www.terasjagat.id/assets/js/search.js',
+  'https://www.terasjagat.id/assets/js/refresh.js',
+  'https://www.terasjagat.id/assets/js/ripple.js',
+  'https://www.terasjagat.id/assets/js/accessibility.js',
+  'https://www.terasjagat.id/assets/js/scrolled.js',
+  'https://www.terasjagat.id/assets/js/heightProtector.js',
+  'https://www.terasjagat.id/assets/js/anchorAd.js',
+  'https://www.terasjagat.id/assets/js/ads.js'
 ];
 
 function getOfflinePage() {
