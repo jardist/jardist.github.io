@@ -1,6 +1,6 @@
 (function () {
   const ANCHOR_SELECTOR =
-    'ins.adsbygoogle[data-anchor-status="displayed"]';
+    'ins.adsbygoogle[data-anchor-status]';
   function fixAnchorAd(element) {
     if (!element.matches(ANCHOR_SELECTOR)) {
       return;
