@@ -1,79 +1,64 @@
 (function () {
-  const ANCHOR_SELECTOR =
-    'ins.adsbygoogle[data-anchor-status]';
+  const ANCHOR_SELECTOR = 'ins.adsbygoogle[data-anchor-status]';
+
+  // ==== Konfigurasi CSS yang ingin dipaksa ====
+  const ANCHOR_STYLE = {
+    'bottom': '80px',
+    'z-index': '123',
+  };
+  // =============================================
+
   function fixAnchorAd(element) {
-    if (!element.matches(ANCHOR_SELECTOR)) {
-      return;
+    if (!element.matches(ANCHOR_SELECTOR)) return;
+    for (const [prop, value] of Object.entries(ANCHOR_STYLE)) {
+      element.style.setProperty(prop, value, 'important');
     }
-    element.style.setProperty(
-      'margin-bottom',
-      '80px',
-      'important'
-    );
   }
+
   function observeAnchorAd(element) {
-    if (!element || element.dataset.anchorObserver === 'true') {
-      return;
-    }
+    if (!element || element.dataset.anchorObserver === 'true') return;
     element.dataset.anchorObserver = 'true';
+
     fixAnchorAd(element);
+
     const anchorObserver = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
-        if (mutation.type === 'attributes') {
-          if (
-            mutation.attributeName === 'style' ||
-            mutation.attributeName === 'data-anchor-status'
-          ) {
-            if (element.matches(ANCHOR_SELECTOR)) {
-              fixAnchorAd(element);
-            }
+        if (mutation.type !== 'attributes') return;
+        if (
+          mutation.attributeName === 'style' ||
+          mutation.attributeName === 'data-anchor-status'
+        ) {
+          if (element.matches(ANCHOR_SELECTOR)) {
+            fixAnchorAd(element);
           }
         }
       });
     });
+
     anchorObserver.observe(element, {
       attributes: true,
-      attributeFilter: [
-        'style',
-        'data-anchor-status'
-      ]
+      attributeFilter: ['style', 'data-anchor-status'],
     });
   }
+
   function scanAnchorAds() {
-    document
-      .querySelectorAll(ANCHOR_SELECTOR)
-      .forEach(function (element) {
-        observeAnchorAd(element);
-      });
+    document.querySelectorAll(ANCHOR_SELECTOR).forEach(observeAnchorAd);
   }
+
   scanAnchorAds();
-  const documentObserver = new MutationObserver(function (mutations) {
+
+  new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
-      if (mutation.type !== 'childList') {
-        return;
-      }
+      if (mutation.type !== 'childList') return;
       mutation.addedNodes.forEach(function (node) {
-        if (node.nodeType !== 1) {
-          return;
-        }
-        if (
-          node.matches &&
-          node.matches(ANCHOR_SELECTOR)
-        ) {
+        if (node.nodeType !== 1) return;
+        if (node.matches && node.matches(ANCHOR_SELECTOR)) {
           observeAnchorAd(node);
         }
         if (node.querySelectorAll) {
-          node
-            .querySelectorAll(ANCHOR_SELECTOR)
-            .forEach(function (element) {
-              observeAnchorAd(element);
-            });
+          node.querySelectorAll(ANCHOR_SELECTOR).forEach(observeAnchorAd);
         }
       });
     });
-  });
-  documentObserver.observe(document.documentElement, {
-    childList: true,
-    subtree: true
-  });
+  }).observe(document.documentElement, { childList: true, subtree: true });
 })();
