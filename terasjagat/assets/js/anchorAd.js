@@ -1,10 +1,7 @@
 (function () {
   'use strict';
-
   const SELECTOR  = 'ins.adsbygoogle[data-anchor-status]';
   const TARGET_ID = 'appContent';
-  document.body?.style.removeProperty('padding');
-  document.body?.style.removeProperty('padding-bottom');
   const PB_SCALE = [
     [80,  'pb-20'],  [96,  'pb-24'],  [112, 'pb-28'],  [128, 'pb-32'],
     [144, 'pb-36'],  [160, 'pb-40'],  [176, 'pb-44'],  [192, 'pb-48'],
@@ -16,19 +13,9 @@
     for (const [v, cls] of PB_SCALE) if (v >= px) return cls;
     return 'pb-96';
   }
-  function ensureTransition(target) {
-    if (target.dataset.hasPaddingTransition) return;
-    target.dataset.hasPaddingTransition = 'true';
-    target.style.setProperty(
-      'transition',
-      'padding-bottom 0.3s ease',
-      'important'
-    );
-  }
   function apply() {
     const target = document.getElementById(TARGET_ID);
     if (!target) return;
-    ensureTransition(target);
     ALL_PB.forEach(c => target.classList.remove(c));
     const ad = document.querySelector(SELECTOR);
     if (!ad) return;
