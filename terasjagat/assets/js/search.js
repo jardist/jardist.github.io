@@ -1,5 +1,5 @@
 (function() {
-    const sheet    = document.getElementById('cari');
+    const sheet = document.getElementById('cari');
     if (!sheet) {
         console.warn('[Search] Elemen #cari tidak ditemukan.');
         return;
@@ -19,6 +19,19 @@
             } catch (e) {}
         }, 150);
     }
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+            if (m.type === 'attributes' && m.attributeName === 'class') {
+                const isHidden = sheet.classList.contains('hidden');
+                if (!isHidden) {
+                    focusInput();
+                } else {
+                    input.blur();
+                }
+            }
+        });
+    });
+    observer.observe(sheet, { attributes: true, attributeFilter: ['class'] });
     function updateClearButton() {
         if (!clearBtn) return;
         clearBtn.classList.toggle('!hidden', input.value.length === 0);
@@ -37,16 +50,4 @@
             } catch (err) {}
         });
     }
-    input.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') input.blur();
-    });
-    const searchBtn = document.getElementById('searchBtn');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            focusInput();
-        });
-    }
-    window.addEventListener('search:open', focusInput);
-    window.SearchSheet = { focusInput, input, clearBtn };
 })();
