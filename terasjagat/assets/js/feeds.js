@@ -99,8 +99,8 @@
     container.innerHTML = ''
       + '<div class="postFeatured"></div>'
       + '<div class="postNormal"></div>'
-      + (showLoadMore ? '<div class="loadMoreWrap"><button type="button" class="loadMoreBtn">' + loadMoreText + '</button></div>' : '')
-      + (showEndOfList ? '<div class="' + endOfListClass + '" style="display:none">' + endOfListText + '</div>' : '');
+      + (showLoadMore ? '<div class="loadMoreWrap"><button type="button" class="loadMoreBtn skeleton ripple ripple-target overflow-hidden relative inline-block bg-primary text-on-primary rounded-full py-2.5 px-6 transition-transform duration-500 cursor-pointer active:rounded-m3-md before:content-[] before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 before:rounded-m3-full before:bg-white/10 before:opacity-0 hover:before:opacity-[0.3]"><div class="inline-flex items-center gap-2 relative text-on-primary text-m3-label-lg"><span class="material-symbols-outlined">expand_more</span><span>' + loadMoreText + '</span></div></button></div>' : '')
+      + (showEndOfList ? '<div class="' + endOfListClass + ' skeleton ripple ripple-target overflow-hidden relative inline-block bg-surface-container-low text-on-surface rounded-full py-2.5 px-6 transition-transform duration-500 cursor-not-allowed active:rounded-m3-md before:content-[] before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 before:rounded-m3-full before:bg-white/10 before:opacity-0 hover:before:opacity-[0.3]" style="display:none"><div class="inline-flex items-center gap-2 relative text-on-surface text-m3-label-lg"><span class="material-symbols-outlined">do_not_disturb_on</span><span>' + endOfListText + '</span></div></div>' : '');
     var featuredEl   = container.querySelector(".postFeatured");
     var normalEl     = container.querySelector(".postNormal");
     var loadMoreWrap = container.querySelector(".loadMoreWrap");
@@ -181,11 +181,11 @@
         + '<div class="art">'
         +   '<figure>'
         +     '<a href="' + link + '" title="' + title + '">'
-        +       (showThumbnail ? '<img src="' + thumb + '" alt="' + title + '">' : '')
+        +       (showThumbnail ? '<img class="w-full" src="' + thumb + '" alt="' + title + '">' : '')
         +     '</a>'
         +   '</figure>'
         +   '<section>'
-        +     '<p class="jud"><a href="' + link + '">' + title + '</a></p>'
+        +     '<p class="jud text-m3-title text-on-surface"><a href="' + link + '">' + title + '</a></p>'
         +     (showDate ? '<time>' + formattedDate + '</time>' : '')
         +     snippetToRender
         +     (showButton ? '<div class="buttonWrap full"><a href="' + link + '" class="button">' + buttonText + '</a></div>' : '')
