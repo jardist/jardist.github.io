@@ -99,8 +99,8 @@
     container.innerHTML = ''
       + '<div class="postFeatured"></div>'
       + '<div class="postNormal"></div>'
-      + (showLoadMore ? '<div class="loadMoreWrap"><button type="button" class="loadMoreBtn mt-4 md:mt-6 skeleton ripple ripple-target overflow-hidden relative block bg-primary text-on-primary rounded-full py-2.5 px-6 transition-transform duration-500 cursor-pointer active:rounded-m3-md before:content-[] before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 before:rounded-m3-full before:bg-white/10 before:opacity-0 hover:before:opacity-[0.3]"><div class="flex items-center justify-center gap-2 relative text-on-primary text-m3-label-lg"><span class="material-symbols-outlined">expand_more</span><span>' + loadMoreText + '</span></div></button></div>' : '')
-      + (showEndOfList ? '<div class="' + endOfListClass + ' mt-4 md:mt-6 skeleton ripple ripple-target overflow-hidden relative block bg-surface-container-low text-on-surface rounded-full py-2.5 px-6 transition-transform duration-500 cursor-not-allowed active:rounded-m3-md before:content-[] before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 before:rounded-m3-full before:bg-white/10 before:opacity-0 hover:before:opacity-[0.3]" style="display:none"><div class="flex items-center justify-center gap-2 relative text-on-surface text-m3-label-lg"><span class="material-symbols-outlined">do_not_disturb_on</span><span>' + endOfListText + '</span></div></div>' : '');
+      + (showLoadMore ? '<div class="loadMoreWrap"><button type="button" class="loadMoreBtn mt-4 md:mt-6 skeleton ripple ripple-target overflow-hidden relative block w-full bg-primary text-on-primary rounded-full py-2.5 px-6 transition-transform duration-500 cursor-pointer active:rounded-m3-md before:content-[] before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 before:rounded-m3-full before:bg-white/10 before:opacity-0 hover:before:opacity-[0.3]"><div class="flex items-center justify-center gap-2 relative text-on-primary text-m3-label-lg"><span class="material-symbols-outlined">expand_more</span><span>' + loadMoreText + '</span></div></button></div>' : '')
+      + (showEndOfList ? '<div class="' + endOfListClass + ' mt-4 md:mt-6 skeleton ripple ripple-target overflow-hidden relative block w-full bg-surface-container-low text-on-surface rounded-full py-2.5 px-6 transition-transform duration-500 cursor-not-allowed active:rounded-m3-md before:content-[] before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 before:rounded-m3-full before:bg-white/10 before:opacity-0 hover:before:opacity-[0.3]" style="display:none"><div class="flex items-center justify-center gap-2 relative text-on-surface text-m3-label-lg"><span class="material-symbols-outlined">do_not_disturb_on</span><span>' + endOfListText + '</span></div></div>' : '');
     var featuredEl   = container.querySelector(".postFeatured");
     var normalEl     = container.querySelector(".postNormal");
     var loadMoreWrap = container.querySelector(".loadMoreWrap");
@@ -175,7 +175,7 @@
       var buttonText    = settings.buttonText || "Selengkapnya";
       var snippetToRender = "";
       if (showSnippet && snippet) {
-        snippetToRender = snippet.charAt(0) === "<" ? snippet : '<p class="ket">' + snippet + '</p>';
+        snippetToRender = snippet.charAt(0) === "<" ? snippet : '<p class="ket text-on-surface">' + snippet + '</p>';
       }
       return ''
         + '<div class="art">'
@@ -185,10 +185,10 @@
         +     '</a>'
         +   '</figure>'
         +   '<section>'
-        +     '<p class="jud text-m3-title text-on-surface"><a href="' + link + '">' + title + '</a></p>'
-        +     (showDate ? '<time>' + formattedDate + '</time>' : '')
+        +     '<p class="jud text-on-surface"><a href="' + link + '">' + title + '</a></p>'
+        +     (showDate ? '<time class="text-on-surface">' + formattedDate + '</time>' : '')
         +     snippetToRender
-        +     (showButton ? '<div class="buttonWrap full"><a href="' + link + '" class="button">' + buttonText + '</a></div>' : '')
+        +     (showButton ? '<a href="' + link + '" class="ripple text-m3-label-lg w-12 h-12 flex justify-center items-center text-primary active:scale-90"><span>' + buttonText + '</span></a>' : '')
         +   '</section>'
         + '</div>';
     }
