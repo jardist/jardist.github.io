@@ -175,7 +175,7 @@
       var buttonText    = settings.buttonText || "Selengkapnya";
       var snippetToRender = "";
       if (showSnippet && snippet) {
-        snippetToRender = snippet.charAt(0) === "<" ? snippet : '<p class="ket text-on-surface">' + snippet + '</p>';
+        snippetToRender = snippet.charAt(0) === "<" ? snippet : '<p class="ket text-m3-body text-on-surface">' + snippet + '</p>';
       }
       return ''
         + '<div class="art">'
@@ -185,10 +185,10 @@
         +     '</a>'
         +   '</figure>'
         +   '<section>'
-        +     '<p class="jud text-on-surface"><a href="' + link + '">' + title + '</a></p>'
-        +     (showDate ? '<time class="text-on-surface">' + formattedDate + '</time>' : '')
+        +     '<p class="jud text-m3-title text-on-surface"><a href="' + link + '">' + title + '</a></p>'
+        +     (showDate ? '<time class="text-m3-label text-on-surface">' + formattedDate + '</time>' : '')
         +     snippetToRender
-        +     (showButton ? '<a href="' + link + '" class="ripple text-m3-label-lg h-12 flex items-center text-primary active:scale-90"><span>' + buttonText + '</span></a>' : '')
+        +     (showButton ? '<a href="' + link + '" class="ripple text-m3-label h-12 flex items-center text-primary active:scale-90"><span>' + buttonText + '</span></a>' : '')
         +   '</section>'
         + '</div>';
     }
