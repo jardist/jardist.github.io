@@ -188,7 +188,7 @@
         +     '<p class="jud text-on-surface"><a href="' + link + '">' + title + '</a></p>'
         +     (showDate ? '<time class="text-on-surface">' + formattedDate + '</time>' : '')
         +     snippetToRender
-        +     (showButton ? '<a href="' + link + '" class="ripple text-m3-label-lg w-12 h-12 flex justify-center items-center text-primary active:scale-90"><span>' + buttonText + '</span></a>' : '')
+        +     (showButton ? '<a href="' + link + '" class="ripple text-m3-label-lg h-12 flex items-center text-primary active:scale-90"><span>' + buttonText + '</span></a>' : '')
         +   '</section>'
         + '</div>';
     }
